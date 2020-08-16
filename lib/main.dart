@@ -43,6 +43,10 @@ class _QuizpageState extends State<Quizpage> {
     'Approximately one quarter of human bones are in the feet.',
     'A slug\'s blood is green.'
   ];
+
+  List<bool> answers = [false, true, true];
+
+  int questionNum = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -53,7 +57,7 @@ class _QuizpageState extends State<Quizpage> {
           flex: 5,
           child: Center(
             child: Text(
-              questions[0],
+              questions[questionNum],
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 25.0),
             ),
@@ -64,22 +68,23 @@ class _QuizpageState extends State<Quizpage> {
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: FlatButton(
-              focusColor: Colors.green.shade700,
-              color: Colors.green,
-              onPressed: () {
-                setState(() {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.access_alarm,
-                      color: Colors.white,
-                    ),
-                  );
-                });
-              },
               child: Text(
                 'True',
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
+              focusColor: Colors.green.shade700,
+              color: Colors.green,
+              onPressed: () {
+                bool correctAns = answers[questionNum];
+                if (correctAns == true) {
+                  print('You got it right');
+                } else {
+                  print('Wrong answer buddy 😔');
+                }
+                setState(() {
+                  questionNum++;
+                });
+              },
             ),
           ),
         ),
@@ -94,8 +99,14 @@ class _QuizpageState extends State<Quizpage> {
               focusColor: Colors.red.shade900,
               color: Colors.red,
               onPressed: () {
+                bool correctAns = answers[questionNum];
+                if (correctAns == false) {
+                  print('You got it right');
+                } else {
+                  print('Wrong answer buddy 😔');
+                }
                 setState(() {
-                  scoreKeeper.removeLast();
+                  questionNum++;
                 });
               },
               child: Text(
