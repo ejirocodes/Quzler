@@ -30,18 +30,8 @@ class Quizpage extends StatefulWidget {
 }
 
 class _QuizpageState extends State<Quizpage> {
-  List<Icon> scoreKeeper = [
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    )
-  ];
+  List<Icon> scoreKeeper = [];
 
-  int questionNum = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,7 +42,7 @@ class _QuizpageState extends State<Quizpage> {
           flex: 5,
           child: Center(
             child: Text(
-              quizBrain.questionBank[questionNum].questionText,
+              quizBrain.getQuestionText(),
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white, fontSize: 25.0),
             ),
@@ -70,15 +60,24 @@ class _QuizpageState extends State<Quizpage> {
 //              focusColor: Colors.green.shade700,
               color: Colors.green,
               onPressed: () {
-                bool correctAns =
-                    quizBrain.questionBank[questionNum].questionAns;
+                bool correctAns = quizBrain.getQuestionAns();
                 if (correctAns == true) {
-                  print('You got it right');
+                  scoreKeeper.add(
+                    Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    ),
+                  );
                 } else {
-                  print('Wrong answer buddy 😔');
+                  scoreKeeper.add(
+                    Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ),
+                  );
                 }
                 setState(() {
-                  questionNum++;
+                  quizBrain.nextQuestion();
                 });
               },
             ),
@@ -95,15 +94,24 @@ class _QuizpageState extends State<Quizpage> {
               focusColor: Colors.red.shade900,
               color: Colors.red,
               onPressed: () {
-                bool correctAns =
-                    quizBrain.questionBank[questionNum].questionAns;
+                bool correctAns = quizBrain.getQuestionAns();
                 if (correctAns == false) {
-                  print('You got it right');
+                  scoreKeeper.add(
+                    Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    ),
+                  );
                 } else {
-                  print('Wrong answer buddy 😔');
+                  scoreKeeper.add(
+                    Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ),
+                  );
                 }
                 setState(() {
-                  questionNum++;
+                  quizBrain.nextQuestion();
                 });
               },
               child: Text(
