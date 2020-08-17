@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz_brain.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class Quzler extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xff1b262c),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -31,6 +32,41 @@ class Quizpage extends StatefulWidget {
 
 class _QuizpageState extends State<Quizpage> {
   List<Icon> scoreKeeper = [];
+
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAns = quizBrain.getQuestionAns();
+
+    setState(
+      () {
+        quizBrain.nextQuestion();
+        if (quizBrain.isFinished() == true) {
+          Alert(
+            context: context,
+            title: "Finished!",
+            desc: 'You\'ve reached the end of the quiz.',
+          ).show();
+          quizBrain.resetQues();
+          scoreKeeper = [];
+        } else {
+          if (correctAns == userPickedAnswer) {
+            scoreKeeper.add(
+              Icon(
+                Icons.check,
+                color: Colors.green,
+              ),
+            );
+          } else {
+            scoreKeeper.add(
+              Icon(
+                Icons.close,
+                color: Colors.red,
+              ),
+            );
+          }
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,66 +89,36 @@ class _QuizpageState extends State<Quizpage> {
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: FlatButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               child: Text(
                 'True',
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
 //              focusColor: Colors.green.shade700,
-              color: Colors.green,
+              color: Color(0xff00bcd4),
               onPressed: () {
-                bool correctAns = quizBrain.getQuestionAns();
-                if (correctAns == true) {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ),
-                  );
-                } else {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ),
-                  );
-                }
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
         ),
         SizedBox(
-          height: 10.0,
+          height: 5.0,
         ),
         Expanded(
           flex: 1,
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: FlatButton(
-              focusColor: Colors.red.shade900,
-              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              focusColor: Color(0xfff12d94),
+              color: Color(0xffe11d74),
               onPressed: () {
-                bool correctAns = quizBrain.getQuestionAns();
-                if (correctAns == false) {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ),
-                  );
-                } else {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ),
-                  );
-                }
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
               child: Text(
                 'False',
